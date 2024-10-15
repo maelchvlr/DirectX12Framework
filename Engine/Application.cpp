@@ -16,8 +16,8 @@ namespace Engine
 				Application* pointer = reinterpret_cast<Application*>(param->lpCreateParams);
 				SetWindowLongPtr(hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pointer));
 
-				std::cout << "Oh boy, here we go." << std::endl;
-				std::cout << "Sent create message." << std::endl;
+				PRINT_N("Oh boy, here we go.");
+				PRINT_N("Sent create message.");
 
 				break;
 			}
@@ -79,7 +79,7 @@ namespace Engine
 	void Application::OnCreate(HWND hwnd)
 	{
 
-		std::cout << "Window created." << std::endl;
+		PRINT_N("Window created.");
 		mRenderer.Initialize(hwnd);
 	}
 
@@ -95,7 +95,7 @@ namespace Engine
 	}
 	void Application::OnDestroy()
 	{
-		std::cout << "Going dark." << std::endl;
+		PRINT_N("Going dark.")
 
 		bIsRunning = false;
 

@@ -22,6 +22,9 @@
     <Filter Include="Render API\DirectX12\DXGI">
       <UniqueIdentifier>{cd41aea6-649d-4720-bab7-f0cad261a402}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render API\DirectX12\Base">
+      <UniqueIdentifier>{fa0ca9fa-45e6-45ec-9408-7bbe0116a51a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -45,6 +48,9 @@
     <ClInclude Include="DXGIAdapter.h">
       <Filter>Render API\DirectX12\DXGI</Filter>
     </ClInclude>
+    <ClInclude Include="D12Device.h">
+      <Filter>Render API\DirectX12\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -61,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="DXGIAdapter.cpp">
       <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClCompile>
+    <ClCompile Include="D12Device.cpp">
+      <Filter>Render API\DirectX12\Base</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

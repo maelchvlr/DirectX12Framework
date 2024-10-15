@@ -3,7 +3,7 @@
 
 namespace Engine
 {
-	class DXGIAdapter : Microsoft::WRL::ComPtr<IDXGIAdapter>
+	class DXGIAdapter : public Microsoft::WRL::ComPtr<IDXGIAdapter>
 	{
 	public:
 		DXGIAdapter() = default;

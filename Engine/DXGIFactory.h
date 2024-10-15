@@ -5,7 +5,7 @@
 
 namespace Engine
 {
-	class DXGIFactory : Microsoft::WRL::ComPtr<IDXGIFactory2>
+	class DXGIFactory : public Microsoft::WRL::ComPtr<IDXGIFactory2>
 	{
 	public:
 		DXGIFactory();

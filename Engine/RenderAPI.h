@@ -2,6 +2,8 @@
 #include "EngineMin.h"
 #include <Windows.h>
 
+#include "D12Device.h"
+
 namespace Engine
 {
 	class ENGINE_API RenderAPI
@@ -12,6 +14,10 @@ namespace Engine
 		~RenderAPI();
 
 		void Initialize(HWND hwnd);
+
+	private:
+
+		D12Device mDevice;
 	};
 }
 
