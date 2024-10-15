@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Render API">
+      <UniqueIdentifier>{63c02949-d812-4d13-8081-45057e048c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render API\DirectX12">
+      <UniqueIdentifier>{7bfc617a-e57a-4d1e-9860-aaa95dbb75ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render API\DirectX12\DXGI">
+      <UniqueIdentifier>{cd41aea6-649d-4720-bab7-f0cad261a402}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineMin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderAPI.h">
+      <Filter>Render API</Filter>
+    </ClInclude>
+    <ClInclude Include="DXGIFactory.h">
+      <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClInclude>
+    <ClInclude Include="Helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DXGIAdapter.h">
+      <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderAPI.cpp">
+      <Filter>Render API</Filter>
+    </ClCompile>
+    <ClCompile Include="DXGIFactory.cpp">
+      <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClCompile>
+    <ClCompile Include="DXGIAdapter.cpp">
+      <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
