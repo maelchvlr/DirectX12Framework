@@ -25,6 +25,12 @@
     <Filter Include="Render API\DirectX12\Base">
       <UniqueIdentifier>{fa0ca9fa-45e6-45ec-9408-7bbe0116a51a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render API\DirectX12\Debug">
+      <UniqueIdentifier>{f662d5b4-2a10-4dac-8327-9c10e036c05c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render API\DirectX12\Commands">
+      <UniqueIdentifier>{17804da5-aa62-47b9-9acd-5c44f6561a85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -51,6 +57,18 @@
     <ClInclude Include="D12Device.h">
       <Filter>Render API\DirectX12\Base</Filter>
     </ClInclude>
+    <ClInclude Include="D12Debug.h">
+      <Filter>Render API\DirectX12\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DXDebug.h">
+      <Filter>Render API\DirectX12\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="D12CommandQueue.h">
+      <Filter>Render API\DirectX12\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="D12CommandList.h">
+      <Filter>Render API\DirectX12\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -70,6 +88,18 @@
     </ClCompile>
     <ClCompile Include="D12Device.cpp">
       <Filter>Render API\DirectX12\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="D12Debug.cpp">
+      <Filter>Render API\DirectX12\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DXDebug.cpp">
+      <Filter>Render API\DirectX12\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="D12CommandQueue.cpp">
+      <Filter>Render API\DirectX12\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="D12CommandList.cpp">
+      <Filter>Render API\DirectX12\Commands</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

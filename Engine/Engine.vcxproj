@@ -81,7 +81,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="D12CommandList.h" />
+    <ClInclude Include="D12CommandQueue.h" />
+    <ClInclude Include="D12Debug.h" />
     <ClInclude Include="D12Device.h" />
+    <ClInclude Include="DXDebug.h" />
     <ClInclude Include="DXGIAdapter.h" />
     <ClInclude Include="DXGIFactory.h" />
     <ClInclude Include="EngineMin.h" />
@@ -91,7 +95,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="D12CommandList.cpp" />
+    <ClCompile Include="D12CommandQueue.cpp" />
+    <ClCompile Include="D12Debug.cpp" />
     <ClCompile Include="D12Device.cpp" />
+    <ClCompile Include="DXDebug.cpp" />
     <ClCompile Include="DXGIAdapter.cpp" />
     <ClCompile Include="DXGIFactory.cpp" />
     <ClCompile Include="pch.cpp">

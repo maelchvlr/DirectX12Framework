@@ -7,7 +7,7 @@
 
 namespace Engine
 {
-	class D12Device : public Microsoft::WRL::ComPtr<ID3D12Device>
+	class ENGINE_API D12Device : public Microsoft::WRL::ComPtr<ID3D12Device>
 	{
 	public:
 		D12Device() = default;

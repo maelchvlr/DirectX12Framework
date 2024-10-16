@@ -3,7 +3,7 @@
 
 #include <windowsx.h>
 
-
+#include "DXDebug.h"
 
 namespace Engine
 {
@@ -95,7 +95,11 @@ namespace Engine
 	}
 	void Application::OnDestroy()
 	{
-		PRINT_N("Going dark.")
+		PRINT_N("Going dark.");
+
+
+		mRenderer.Release();
+		DXDebug::Get().GetLiveObjects();
 
 		bIsRunning = false;
 
