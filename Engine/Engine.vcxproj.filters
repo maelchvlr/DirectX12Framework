@@ -31,6 +31,9 @@
     <Filter Include="Render API\DirectX12\Commands">
       <UniqueIdentifier>{17804da5-aa62-47b9-9acd-5c44f6561a85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render API\DirectX12\Ressource">
+      <UniqueIdentifier>{e1ca661b-4e9e-457e-99a1-3b08b4524e42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -69,6 +72,18 @@
     <ClInclude Include="D12CommandList.h">
       <Filter>Render API\DirectX12\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="DXGISwapChain.h">
+      <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D12Ressource.h">
+      <Filter>Render API\DirectX12\Ressource</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderDataTypes.h">
+      <Filter>Render API</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -100,6 +115,12 @@
     </ClCompile>
     <ClCompile Include="D12CommandList.cpp">
       <Filter>Render API\DirectX12\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="DXGISwapChain.cpp">
+      <Filter>Render API\DirectX12\DXGI</Filter>
+    </ClCompile>
+    <ClCompile Include="D12Ressource.cpp">
+      <Filter>Render API\DirectX12\Ressource</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

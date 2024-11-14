@@ -60,7 +60,7 @@ namespace Engine
 
 		RegisterClass(&wndClass);
 
-		mWindowHandle = CreateWindow(L"BaseWindowClass", L"DirectX12Engine", WS_OVERLAPPEDWINDOW, 200, 200, 1280, 720, 0, 0, wndClass.hInstance, this);
+		mWindowHandle = CreateWindow(L"BaseWindowClass", L"DirectX12Engine", WS_OVERLAPPEDWINDOW, 200, 200, mWidth, mHeight, 0, 0, wndClass.hInstance, this);
 
 
 		if (!mWindowHandle)
@@ -80,7 +80,7 @@ namespace Engine
 	{
 
 		PRINT_N("Window created.");
-		mRenderer.Initialize(hwnd);
+		mRenderer.Initialize(hwnd, mWidth, mHeight);
 	}
 
 	void Application::Update()
@@ -92,16 +92,22 @@ namespace Engine
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
+
+		if (bIsRunning)
+		{
+			mRenderer.UpdateDraw();
+		}
 	}
+
 	void Application::OnDestroy()
 	{
+		bIsRunning = false;
 		PRINT_N("Going dark.");
 
 
 		mRenderer.Release();
 		DXDebug::Get().GetLiveObjects();
 
-		bIsRunning = false;
 
 
 	}

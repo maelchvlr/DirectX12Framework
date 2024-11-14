@@ -10,6 +10,8 @@
 #include <dxgi1_6.h>
 #include <dxgidebug.h>
 
+#include <DirectXMath.h>
+
 //compiled lib files for D12
 
 #pragma comment(lib, "dxgi.lib")
@@ -19,5 +21,6 @@
 // General headers:
 #include "EngineMin.h"
 #include "Helper.h"
+#include "EngineSettings.h"
 
 #endif //PCH_H

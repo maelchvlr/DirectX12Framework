@@ -33,6 +33,13 @@ namespace Engine
 
 	}
 
+	void D12CommandQueue::M_ExecuteCommandList(ID3D12CommandList* pCommandList)
+	{
+		Get()->ExecuteCommandLists(1, (ID3D12CommandList* const*)&pCommandList);
+		mCurrentFenceValue++;
+		Get()->Signal(mFence.Get(), mCurrentFenceValue);
+	}
+
 	void D12CommandQueue::Release()
 	{
 
@@ -44,6 +51,17 @@ namespace Engine
 		if (mFence.Get())
 		{
 			mFence.Reset();
+		}
+	}
+	void D12CommandQueue::FlushQueue()
+	{
+		if (Get())
+		{
+			for(unsigned int i = 0; i < G_MAX_SWAPCHAIN_BUFFERS; i++)
+			{
+				Get()->Signal(mFence.Get(), mCurrentFenceValue + i);
+			}
+
 		}
 	}
 }

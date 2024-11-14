@@ -85,13 +85,17 @@
     <ClInclude Include="D12CommandQueue.h" />
     <ClInclude Include="D12Debug.h" />
     <ClInclude Include="D12Device.h" />
+    <ClInclude Include="D12Ressource.h" />
     <ClInclude Include="DXDebug.h" />
     <ClInclude Include="DXGIAdapter.h" />
     <ClInclude Include="DXGIFactory.h" />
+    <ClInclude Include="DXGISwapChain.h" />
     <ClInclude Include="EngineMin.h" />
+    <ClInclude Include="EngineSettings.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderAPI.h" />
+    <ClInclude Include="RenderDataTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -99,9 +103,11 @@
     <ClCompile Include="D12CommandQueue.cpp" />
     <ClCompile Include="D12Debug.cpp" />
     <ClCompile Include="D12Device.cpp" />
+    <ClCompile Include="D12Ressource.cpp" />
     <ClCompile Include="DXDebug.cpp" />
     <ClCompile Include="DXGIAdapter.cpp" />
     <ClCompile Include="DXGIFactory.cpp" />
+    <ClCompile Include="DXGISwapChain.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

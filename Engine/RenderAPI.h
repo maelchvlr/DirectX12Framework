@@ -2,9 +2,14 @@
 #include "EngineMin.h"
 #include <Windows.h>
 
+#include "RenderDataTypes.h"
+
 #include "D12Device.h"
 #include "D12CommandQueue.h"
 #include "D12CommandList.h"
+#include "DXGISwapChain.h"
+
+#include "D12Ressource.h"
 
 namespace Engine
 {
@@ -15,7 +20,9 @@ namespace Engine
 		RenderAPI() = default;
 		~RenderAPI();
 
-		void Initialize(HWND hwnd);
+		void Initialize(HWND hwnd, const UINT width, const UINT height);
+
+		void UpdateDraw();
 
 		void Release();
 
@@ -24,6 +31,14 @@ namespace Engine
 		D12Device mDevice;
 		D12CommandQueue	mCommandQueue;
 		D12CommandList mCommandList;
+
+		DXGISwapChain mSwapChain;
+
+		D12Ressource mDynamicVertexBuffer;
+
+	private:
+		UINT mWidth = 0;
+		UINT mHeight = 0;
 
 	};
 }
