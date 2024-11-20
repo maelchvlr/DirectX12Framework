@@ -34,6 +34,9 @@
     <Filter Include="Render API\DirectX12\Ressource">
       <UniqueIdentifier>{e1ca661b-4e9e-457e-99a1-3b08b4524e42}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render API\DirectX12\Pipeline">
+      <UniqueIdentifier>{853df583-a8ef-4383-b2bf-e0a0a6eb4674}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -84,6 +87,9 @@
     <ClInclude Include="RenderDataTypes.h">
       <Filter>Render API</Filter>
     </ClInclude>
+    <ClInclude Include="HLSLShader.h">
+      <Filter>Render API\DirectX12\Pipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -121,6 +127,9 @@
     </ClCompile>
     <ClCompile Include="D12Ressource.cpp">
       <Filter>Render API\DirectX12\Ressource</Filter>
+    </ClCompile>
+    <ClCompile Include="HLSLShader.cpp">
+      <Filter>Render API\DirectX12\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

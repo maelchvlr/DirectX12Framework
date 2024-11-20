@@ -4,6 +4,12 @@
 #include "DXGIFactory.h"
 #include "DXGIAdapter.h"
 
+#include "D12Debug.h"
+
+#include "HLSLShader.h"
+
+
+
 namespace Engine
 {
 	using namespace Render;
@@ -55,6 +61,35 @@ namespace Engine
 		mDynamicVertexBuffer->Map(0, 0, &destination);
 		memcpy(destination, &vertexData, sizeof(Vertex));
 		mDynamicVertexBuffer->Unmap(0, 0);
+
+		HLSLShader testShader;
+
+		testShader.Initialize(L"shaders/VS.hlsl", HLSLShader::ShaderType::VERTEX);
+
+
+		/*
+		 PLAN:
+		
+		Create Shader Programs:
+		- wrapper and compilation
+		- create the actual shader program
+
+
+		Setup two input layouts (vertex/index buffers + one for datastructure needed for the pipeline/shader):
+		- pipeline input
+		-- wrapper ?
+		- root signature
+		-- wrapper ?
+
+
+		setup the actual pipeline:
+		- wrapper
+		-- set parameters
+		- create the functionnality that couples everything together into a pipeline
+
+		
+		*/
+
 
 
 		/*
