@@ -6,9 +6,6 @@
 
 #include "D12Debug.h"
 
-#include "HLSLShader.h"
-
-
 
 namespace Engine
 {
@@ -24,6 +21,7 @@ namespace Engine
 		mWidth = width;
 		mHeight = height;
 
+		D12Debug::Get().Enable();
 
 		DXGIFactory factory;
 
@@ -62,33 +60,32 @@ namespace Engine
 		memcpy(destination, &vertexData, sizeof(Vertex));
 		mDynamicVertexBuffer->Unmap(0, 0);
 
-		HLSLShader testShader;
-
-		testShader.Initialize(L"shaders/VS.hlsl", HLSLShader::ShaderType::VERTEX);
+		
 
 
 		/*
 		 PLAN:
 		
 		Create Shader Programs:
-		- wrapper and compilation
-		- create the actual shader program
+		- wrapper and compilation [X]
+		- create the actual shader program [X]
 
 
 		Setup two input layouts (vertex/index buffers + one for datastructure needed for the pipeline/shader):
-		- pipeline input
-		-- wrapper ?
-		- root signature
-		-- wrapper ?
+		- pipeline input [X]
+		-- wrapper ? [X]
+		- root signature [X]
+		-- wrapper ? [X]
 
 
 		setup the actual pipeline:
-		- wrapper
-		-- set parameters
-		- create the functionnality that couples everything together into a pipeline
+		- wrapper [X]
+		-- set parameters [X]
+		- create the functionnality that couples everything together into a pipeline [X]
 
 		
 		*/
+		// DONE
 
 
 
@@ -99,6 +96,24 @@ namespace Engine
 		// Readback memory on GPU(With Read from the CPU)
 		//
 		*/
+
+		mBasePipeline.Initialize(mDevice.Get());
+
+
+		/*
+		Next steps:
+
+		bind render targer to every part of the output merger [X]
+		
+		bind the root signature and pipeline to the GPU / draw process []
+		
+		bind a datastorage to the "pipeline"/input assembler and give it a view []
+		Tell how to interpret data -> primitive topology []
+
+		Draw call []
+		*/
+
+
 
 	}
 
@@ -117,6 +132,17 @@ namespace Engine
 		const float clearColor[] = { 0.0f, 0.2f, 0.2f, 1.0f };
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = mSwapChain.GetCurrentRTVHandle();
 		mCommandList.GFXCmd()->ClearRenderTargetView(rtvHandle, clearColor, 0, 0);
+		mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, 0);
+
+
+
+		/*
+		
+		do drawing stuff there
+		
+		
+		
+		*/
 
 
 		barrier = {};

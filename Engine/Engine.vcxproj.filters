@@ -90,6 +90,12 @@
     <ClInclude Include="HLSLShader.h">
       <Filter>Render API\DirectX12\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="D12RootSignature.h">
+      <Filter>Render API\DirectX12\Pipeline</Filter>
+    </ClInclude>
+    <ClInclude Include="D12PipelineState.h">
+      <Filter>Render API\DirectX12\Pipeline</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -129,6 +135,12 @@
       <Filter>Render API\DirectX12\Ressource</Filter>
     </ClCompile>
     <ClCompile Include="HLSLShader.cpp">
+      <Filter>Render API\DirectX12\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="D12RootSignature.cpp">
+      <Filter>Render API\DirectX12\Pipeline</Filter>
+    </ClCompile>
+    <ClCompile Include="D12PipelineState.cpp">
       <Filter>Render API\DirectX12\Pipeline</Filter>
     </ClCompile>
   </ItemGroup>

@@ -85,7 +85,9 @@
     <ClInclude Include="D12CommandQueue.h" />
     <ClInclude Include="D12Debug.h" />
     <ClInclude Include="D12Device.h" />
+    <ClInclude Include="D12PipelineState.h" />
     <ClInclude Include="D12Ressource.h" />
+    <ClInclude Include="D12RootSignature.h" />
     <ClInclude Include="DXDebug.h" />
     <ClInclude Include="DXGIAdapter.h" />
     <ClInclude Include="DXGIFactory.h" />
@@ -104,7 +106,9 @@
     <ClCompile Include="D12CommandQueue.cpp" />
     <ClCompile Include="D12Debug.cpp" />
     <ClCompile Include="D12Device.cpp" />
+    <ClCompile Include="D12PipelineState.cpp" />
     <ClCompile Include="D12Ressource.cpp" />
+    <ClCompile Include="D12RootSignature.cpp" />
     <ClCompile Include="DXDebug.cpp" />
     <ClCompile Include="DXGIAdapter.cpp" />
     <ClCompile Include="DXGIFactory.cpp" />

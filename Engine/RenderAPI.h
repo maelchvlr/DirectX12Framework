@@ -11,6 +11,8 @@
 
 #include "D12Ressource.h"
 
+#include "D12PipelineState.h"
+
 namespace Engine
 {
 	class ENGINE_API RenderAPI
@@ -33,6 +35,8 @@ namespace Engine
 		D12CommandList mCommandList;
 
 		DXGISwapChain mSwapChain;
+
+		D12PipelineState mBasePipeline;
 
 		D12Ressource mDynamicVertexBuffer;
 
