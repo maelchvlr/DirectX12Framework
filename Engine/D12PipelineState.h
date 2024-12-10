@@ -17,6 +17,8 @@ namespace Engine {
 
 		void Release();
 
+		inline ID3D12RootSignature* GetRootSignature() const { return mRootSignature.Get(); }
+
 	private:
 		
 		D12RootSignature mRootSignature;

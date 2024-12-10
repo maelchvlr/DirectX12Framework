@@ -39,6 +39,11 @@ namespace Engine
 		D12PipelineState mBasePipeline;
 
 		D12Ressource mDynamicVertexBuffer;
+		D3D12_VERTEX_BUFFER_VIEW mDynamicVertexBufferView;
+
+
+		D3D12_VIEWPORT mViewport;
+		D3D12_RECT mScissorRect;
 
 	private:
 		UINT mWidth = 0;

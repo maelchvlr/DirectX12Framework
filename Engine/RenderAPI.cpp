@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "RenderAPI.h"
 
+#include <vector>
+
 #include "DXGIFactory.h"
 #include "DXGIAdapter.h"
 
@@ -50,16 +52,48 @@ namespace Engine
 		mDynamicVertexBuffer.Initialize(mDevice.Get(), KBs(16), D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ);
 		mDynamicVertexBuffer.Get()->SetName(L"Dynamic Vertex Buffer");
 
-		Vertex vertexData;
-		vertexData.position = { 1.0f, 5.0f, 3.0f };
-		vertexData.color = { 0.0f, 1.0f, 0.0f, 1.0f };
+		std::vector<Vertex> vertices;
+
+		for (int i = 0; i < 3; i++)
+		{
+			Vertex vertexData;
+			vertexData.color = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+			switch (i)
+			{
+				case 0:
+					vertexData.position = { -0.6f, -0.6f, 0.0f };
+					vertexData.color = { 1.0f, 0.0f, 0.0f, 1.0f };
+					break;
+				case 1:
+					vertexData.position = { 0.0f, 0.6f, 0.0f };
+					vertexData.color = { 0.0f, 1.0f, 0.0f, 1.0f };
+					break;
+				case 2:
+					vertexData.position = { 0.6f, -0.6f, 0.0f };
+					vertexData.color = { 0.0f, 0.0f, 1.0f, 1.0f };
+					break;
+
+				default:
+					break;
+			}
+
+			vertices.push_back(vertexData);
+		}
+		
+
+
+		// Screen Space coordinates only have X and Y cooodinates mapped to (-1, 1) -> (1,-1)
 
 		void* destination = nullptr;
 
 		mDynamicVertexBuffer->Map(0, 0, &destination);
-		memcpy(destination, &vertexData, sizeof(Vertex));
+		memcpy(destination, vertices.data(), sizeof(Vertex) * vertices.size());
 		mDynamicVertexBuffer->Unmap(0, 0);
 
+		mDynamicVertexBufferView.BufferLocation = mDynamicVertexBuffer.Get()->GetGPUVirtualAddress();
+		mDynamicVertexBufferView.StrideInBytes = sizeof(Vertex);
+		mDynamicVertexBufferView.SizeInBytes = KBs(16);
 		
 
 
@@ -100,17 +134,36 @@ namespace Engine
 		mBasePipeline.Initialize(mDevice.Get());
 
 
+		mViewport.TopLeftX = 0;
+		mViewport.TopLeftY = 0;
+		mViewport.Width = mWidth;
+		mViewport.Height = mHeight;
+		mViewport.MinDepth = 0.0f;
+		mViewport.MaxDepth = 1.0f;
+
+		mScissorRect.left = 0;
+		mScissorRect.top = 0;
+		mScissorRect.right = mViewport.Width;
+		mScissorRect.bottom = mViewport.Height;
+
+
 		/*
 		Next steps:
 
 		bind render targer to every part of the output merger [X]
 		
-		bind the root signature and pipeline to the GPU / draw process []
-		
-		bind a datastorage to the "pipeline"/input assembler and give it a view []
-		Tell how to interpret data -> primitive topology []
+		bind the root signature and pipeline to the GPU / draw process [X]
 
-		Draw call []
+		Tell how to interpret data -> primitive topology [X]
+		
+		bind a datastorage to the "pipeline"/input assembler and give it a view [X]
+
+		Draw call [X]
+
+		Viewport []
+
+		Scissor rect []
+
 		*/
 
 
@@ -134,6 +187,16 @@ namespace Engine
 		mCommandList.GFXCmd()->ClearRenderTargetView(rtvHandle, clearColor, 0, 0);
 		mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, 0);
 
+		mCommandList.GFXCmd()->RSSetViewports(1, &mViewport);
+		mCommandList.GFXCmd()->RSSetScissorRects(1, &mScissorRect);
+
+
+		mCommandList.GFXCmd()->SetGraphicsRootSignature(mBasePipeline.GetRootSignature());
+		mCommandList.GFXCmd()->SetPipelineState(mBasePipeline.Get());
+		mCommandList.GFXCmd()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		mCommandList.GFXCmd()->IASetVertexBuffers(0, 1, &mDynamicVertexBufferView);
+
 
 
 		/*
@@ -144,6 +207,8 @@ namespace Engine
 		
 		*/
 
+
+		mCommandList.GFXCmd()->DrawInstanced(3, 1, 0, 0);
 
 		barrier = {};
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
