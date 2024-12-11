@@ -1,0 +1,96 @@
+/*
+		 PLAN:
+		
+		Create Shader Programs:
+		- wrapper and compilation [X]
+		- create the actual shader program [X]
+
+
+		Setup two input layouts (vertex/index buffers + one for datastructure needed for the pipeline/shader):
+		- pipeline input [X]
+		-- wrapper ? [X]
+		- root signature [X]
+		-- wrapper ? [X]
+
+
+		setup the actual pipeline:
+		- wrapper [X]
+		-- set parameters [X]
+		- create the functionnality that couples everything together into a pipeline [X]
+
+
+		*/
+		
+
+
+
+		/*
+		// ONLY CPU = default ram / cache
+		// ONLY GPU = default heap on GPU (VRAM)
+		// Shared CPU and GPU = with read/write for all - it's stored on the GPU
+		// Readback memory on GPU(With Read from the CPU)
+		//
+		*/
+
+
+		/*
+
+		bind render targer to every part of the output merger [X]
+		
+		bind the root signature and pipeline to the GPU / draw process [X]
+
+		Tell how to interpret data -> primitive topology [X]
+		
+		bind a datastorage to the "pipeline"/input assembler and give it a view [X]
+
+		Draw call [X]
+
+		Viewport [X]
+
+		Scissor rect [X]
+
+		__________________________________________________
+
+		Math Coordinate system : DirectXMath to setup 3D world [X]
+
+		Uploading the camera/viewpoint matrix that helps translate from 3D to 2D:
+		 - Constant buffer [X]
+		 - Bind it to the pipeline [X]
+
+		Rendering a 3D box - Creating the vertices and uploading []
+		Depth buffering []
+
+		Uploading data to the default heap []
+		Ressource barriers []
+
+
+		------
+
+		Direct X 12 coordinate system: Left handed system (X toward the right, Y up, Z towards the horizon)
+		Define the coordinate system [X]
+
+		Define the camera position with a looking direction []
+
+		Define a 3D object at 0 0 0 []
+		Offset the camera and set it to look at the origin []
+
+		Adress the math and shader computation to render the object []
+
+
+		*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+		/////////////////// info
+
+		a constant buffer has to be aligned by 255 bytes

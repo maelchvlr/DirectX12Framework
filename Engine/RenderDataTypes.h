@@ -13,5 +13,10 @@ namespace Engine
 
 		};
 
+
+		struct PassData
+		{
+			DirectX::XMMATRIX viewProjectionMatrix = DirectX::XMMatrixIdentity();
+		};
 	}
 }

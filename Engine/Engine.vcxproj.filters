@@ -37,6 +37,12 @@
     <Filter Include="Render API\DirectX12\Pipeline">
       <UniqueIdentifier>{853df583-a8ef-4383-b2bf-e0a0a6eb4674}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{9f5432ff-b129-420a-bf88-d0497d16b1f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render API\DirectX12\Descriptors">
+      <UniqueIdentifier>{3b8580da-9fc5-4f5b-bf83-434f8b0cddc9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -96,6 +102,12 @@
     <ClInclude Include="D12PipelineState.h">
       <Filter>Render API\DirectX12\Pipeline</Filter>
     </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="D12DescriptorHeap.h">
+      <Filter>Render API\DirectX12\Descriptors</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -143,5 +155,14 @@
     <ClCompile Include="D12PipelineState.cpp">
       <Filter>Render API\DirectX12\Pipeline</Filter>
     </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="D12DescriptorHeap.cpp">
+      <Filter>Render API\DirectX12\Descriptors</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ToDo.txt" />
   </ItemGroup>
 </Project>

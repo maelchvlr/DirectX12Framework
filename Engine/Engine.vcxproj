@@ -88,6 +88,7 @@
     <ClInclude Include="D12PipelineState.h" />
     <ClInclude Include="D12Ressource.h" />
     <ClInclude Include="D12RootSignature.h" />
+    <ClInclude Include="D12DescriptorHeap.h" />
     <ClInclude Include="DXDebug.h" />
     <ClInclude Include="DXGIAdapter.h" />
     <ClInclude Include="DXGIFactory.h" />
@@ -99,6 +100,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="RenderAPI.h" />
     <ClInclude Include="RenderDataTypes.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -109,6 +111,7 @@
     <ClCompile Include="D12PipelineState.cpp" />
     <ClCompile Include="D12Ressource.cpp" />
     <ClCompile Include="D12RootSignature.cpp" />
+    <ClCompile Include="D12DescriptorHeap.cpp" />
     <ClCompile Include="DXDebug.cpp" />
     <ClCompile Include="DXGIAdapter.cpp" />
     <ClCompile Include="DXGIFactory.cpp" />
@@ -119,6 +122,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="RenderAPI.cpp" />
+    <ClCompile Include="Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ToDo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,10 +12,25 @@ struct VS_OUTPUT
 	float4 color : COLOR;
 };
 
+
+struct PassData
+{
+	float4x4 viewProj;
+};
+
+cbuffer gPassData : register(b0)
+{
+    PassData gPassData;
+};
+
+
+
 VS_OUTPUT main(VS_INPUT input)
 {
+	
+	
 	VS_OUTPUT output;
-	output.position = float4(input.position, 1.0f);
+    output.position = mul(gPassData.viewProj, float4(input.position, 1.0f));
 	output.color = input.color;
 
 	return output;

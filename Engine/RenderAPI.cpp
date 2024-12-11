@@ -8,6 +8,8 @@
 
 #include "D12Debug.h"
 
+#include "Utils.h"
+
 
 namespace Engine
 {
@@ -52,9 +54,61 @@ namespace Engine
 		mDynamicVertexBuffer.Initialize(mDevice.Get(), KBs(16), D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ);
 		mDynamicVertexBuffer.Get()->SetName(L"Dynamic Vertex Buffer");
 
+
+
 		std::vector<Vertex> vertices;
 
-		for (int i = 0; i < 3; i++)
+#define G_BOX_VERTICES 18
+
+		Vertex verticesBox[G_BOX_VERTICES];
+
+		verticesBox[0].position = { -1.0f, -1.0f, -1.0f };
+		verticesBox[0].color = { 0.0f, 0.0f, 0.3f, 1.0f };
+		verticesBox[1].position = { -1.0f, 1.0f, -1.0f };
+		verticesBox[1].color = { 0.0f, 0.0f, 0.5f, 1.0f };
+		verticesBox[2].position = { 1.0f, -1.0f, -1.0f };
+		verticesBox[2].color = { 0.0f, 0.0f, 0.5f, 1.0f };
+
+		verticesBox[3].position = { -1.0f, 1.0f, -1.0f };
+		verticesBox[3].color = { 0.0f, 0.0f, 0.5f, 1.0f };
+		verticesBox[4].position = { 1.0f, 1.0f, -1.0f };
+		verticesBox[4].color = { 0.0f, 0.0f, 0.8f, 1.0f };
+		verticesBox[5].position = { 1.0f, -1.0f, -1.0f };
+		verticesBox[5].color = { 0.0f, 0.0f, 0.5f, 1.0f };
+
+		verticesBox[6].position = { -1.0f, 1.0f, 1.0f };
+		verticesBox[6].color = { 0.3f, 0.0f, 0.3f, 1.0f };
+		verticesBox[7].position = { -1.0f, -1.0f, 1.0f };
+		verticesBox[7].color = { 0.3f, 0.0f, 0.3f, 1.0f };
+		verticesBox[8].position = { 1.0f, 1.0f, 1.0f };
+		verticesBox[8].color = { 0.3f, 0.0f, 0.3f, 1.0f };
+
+		verticesBox[9].position = { -1.0f, -1.0f, 1.0f };
+		verticesBox[9].color = { 0.3f, 0.0f, 0.3f, 1.0f };
+		verticesBox[10].position = { 1.0f, -1.0f, 1.0f };
+		verticesBox[10].color = { 0.3f, 0.0f, 0.3f, 1.0f };
+		verticesBox[11].position = { 1.0f, 1.0f, 1.0f };
+		verticesBox[11].color = { 0.3f, 0.0f, 0.3f, 1.0f };
+
+		verticesBox[12].position = { -1.0f,-1.0f, 1.0f };
+		verticesBox[12].color = { 0.3f, 0.3f, 0.3f, 1.0f };
+		verticesBox[13].position = { -1.0f, 1.0f, 1.0f };
+		verticesBox[13].color = { 0.3f, 0.3f, 0.3f, 1.0f };
+		verticesBox[14].position = { -1.0f, -1.0f, -1.0f };
+		verticesBox[14].color = { 0.3f, 0.3f, 0.3f, 1.0f };
+
+		verticesBox[15].position = { -1.0f,1.0f, 1.0f };
+		verticesBox[15].color = { 0.3f, 0.3f, 0.3f, 1.0f };
+		verticesBox[16].position = { -1.0f, 1.0f, -1.0f };
+		verticesBox[16].color = { 0.3f, 0.3f, 0.3f, 1.0f };
+		verticesBox[17].position = { -1.0f, -1.0f, -1.0f };
+		verticesBox[17].color = { 0.3f, 0.3f, 0.3f, 1.0f };
+
+
+
+
+
+		/*for (int i = 0; i < 3; i++)
 		{
 			Vertex vertexData;
 			vertexData.color = { 0.0f, 1.0f, 0.0f, 1.0f };
@@ -62,15 +116,15 @@ namespace Engine
 			switch (i)
 			{
 				case 0:
-					vertexData.position = { -0.6f, -0.6f, 0.0f };
+					vertexData.position = { -0.5f, -0.5f, 0.0f };
 					vertexData.color = { 1.0f, 0.0f, 0.0f, 1.0f };
 					break;
 				case 1:
-					vertexData.position = { 0.0f, 0.6f, 0.0f };
+					vertexData.position = { 0.0f, 0.5f, 0.0f };
 					vertexData.color = { 0.0f, 1.0f, 0.0f, 1.0f };
 					break;
 				case 2:
-					vertexData.position = { 0.6f, -0.6f, 0.0f };
+					vertexData.position = { 0.5f, -0.5f, 0.0f };
 					vertexData.color = { 0.0f, 0.0f, 1.0f, 1.0f };
 					break;
 
@@ -79,59 +133,34 @@ namespace Engine
 			}
 
 			vertices.push_back(vertexData);
-		}
+		}*/
 		
 
 
 		// Screen Space coordinates only have X and Y cooodinates mapped to (-1, 1) -> (1,-1)
 
-		void* destination = nullptr;
+		
+		memcpy(mDynamicVertexBuffer.GetCPUMemory(), verticesBox, sizeof(Vertex) * G_BOX_VERTICES);
 
-		mDynamicVertexBuffer->Map(0, 0, &destination);
-		memcpy(destination, vertices.data(), sizeof(Vertex) * vertices.size());
-		mDynamicVertexBuffer->Unmap(0, 0);
 
 		mDynamicVertexBufferView.BufferLocation = mDynamicVertexBuffer.Get()->GetGPUVirtualAddress();
 		mDynamicVertexBufferView.StrideInBytes = sizeof(Vertex);
 		mDynamicVertexBufferView.SizeInBytes = KBs(16);
 		
 
-
-		/*
-		 PLAN:
-		
-		Create Shader Programs:
-		- wrapper and compilation [X]
-		- create the actual shader program [X]
-
-
-		Setup two input layouts (vertex/index buffers + one for datastructure needed for the pipeline/shader):
-		- pipeline input [X]
-		-- wrapper ? [X]
-		- root signature [X]
-		-- wrapper ? [X]
-
-
-		setup the actual pipeline:
-		- wrapper [X]
-		-- set parameters [X]
-		- create the functionnality that couples everything together into a pipeline [X]
-
-		
-		*/
-		// DONE
-
-
-
-		/*
-		// ONLY CPU = default ram / cache
-		// ONLY GPU = default heap on GPU (VRAM)
-		// Shared CPU and GPU = with read/write for all - it's stored on the GPU
-		// Readback memory on GPU(With Read from the CPU)
-		//
-		*/
-
 		mBasePipeline.Initialize(mDevice.Get());
+
+		mDepthBuffer.InitializeAsDepthBuffer(mDevice.Get(), mWidth, mHeight);
+
+		mDepthDescHeap.InitializeDepthHeap(mDevice.Get());
+
+		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+		dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+		dsvDesc.Texture2D.MipSlice = 0;
+		dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+
+		mDevice->CreateDepthStencilView(mDepthBuffer.Get(), &dsvDesc, mDepthDescHeap.Get()->GetCPUDescriptorHandleForHeapStart());
 
 
 		mViewport.TopLeftX = 0;
@@ -145,26 +174,18 @@ namespace Engine
 		mScissorRect.top = 0;
 		mScissorRect.right = mViewport.Width;
 		mScissorRect.bottom = mViewport.Height;
-
-
-		/*
-		Next steps:
-
-		bind render targer to every part of the output merger [X]
 		
-		bind the root signature and pipeline to the GPU / draw process [X]
+		DirectX::XMMATRIX viewMatrix;
 
-		Tell how to interpret data -> primitive topology [X]
-		
-		bind a datastorage to the "pipeline"/input assembler and give it a view [X]
+		viewMatrix = DirectX::XMMatrixLookAtLH({-2.0f, 3.0f, -3.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f});
 
-		Draw call [X]
+		DirectX::XMMATRIX projectionMatrix;
 
-		Viewport []
+		projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(70.0f), 16.0f / 9.0f, 1.0f, 50.0f);
 
-		Scissor rect []
+		mViewProjectionMatrix = viewMatrix * projectionMatrix;
 
-		*/
+		mCBPassData.Initialize(mDevice.Get(), Utils::CalculateCOnstantBufferAlignment(sizeof(PassData)), D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ);
 
 
 
@@ -172,6 +193,10 @@ namespace Engine
 
 	void RenderAPI::UpdateDraw()
 	{
+		memcpy(mCBPassData.GetCPUMemory(), &mViewProjectionMatrix, sizeof(PassData));
+
+
+
 		D3D12_RESOURCE_BARRIER barrier = {};
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
@@ -184,8 +209,12 @@ namespace Engine
 
 		const float clearColor[] = { 0.0f, 0.2f, 0.2f, 1.0f };
 		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = mSwapChain.GetCurrentRTVHandle();
+		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = mDepthDescHeap.Get()->GetCPUDescriptorHandleForHeapStart();
+
+
 		mCommandList.GFXCmd()->ClearRenderTargetView(rtvHandle, clearColor, 0, 0);
-		mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, 0);
+		mCommandList.GFXCmd()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, 0);
+		mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 
 		mCommandList.GFXCmd()->RSSetViewports(1, &mViewport);
 		mCommandList.GFXCmd()->RSSetScissorRects(1, &mScissorRect);
@@ -198,17 +227,16 @@ namespace Engine
 		mCommandList.GFXCmd()->IASetVertexBuffers(0, 1, &mDynamicVertexBufferView);
 
 
-
-		/*
-		
-		do drawing stuff there
-		
-		
-		
-		*/
+		mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(0, mCBPassData.Get()->GetGPUVirtualAddress());
 
 
-		mCommandList.GFXCmd()->DrawInstanced(3, 1, 0, 0);
+		
+		
+
+
+		// do drawing stuff there
+
+		mCommandList.GFXCmd()->DrawInstanced(G_BOX_VERTICES, 1, 0, 0);
 
 		barrier = {};
 		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;

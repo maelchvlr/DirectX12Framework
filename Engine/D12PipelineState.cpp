@@ -41,8 +41,9 @@ namespace Engine {
 		desc.RasterizerState.DepthClipEnable = true;
 		desc.RasterizerState.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
 
+		desc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 		desc.DepthStencilState = {};
-		desc.DepthStencilState.DepthEnable = false;
+		desc.DepthStencilState.DepthEnable = true;
 		desc.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
 		desc.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
 
