@@ -43,6 +43,9 @@
     <Filter Include="Render API\DirectX12\Descriptors">
       <UniqueIdentifier>{3b8580da-9fc5-4f5b-bf83-434f8b0cddc9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Render API\DirectX12\MemoryManagement">
+      <UniqueIdentifier>{a96478ea-20c6-4113-88c1-f175fdda3a85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -108,6 +111,9 @@
     <ClInclude Include="D12DescriptorHeap.h">
       <Filter>Render API\DirectX12\Descriptors</Filter>
     </ClInclude>
+    <ClInclude Include="BufferUploader.h">
+      <Filter>Render API\DirectX12\MemoryManagement</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -160,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="D12DescriptorHeap.cpp">
       <Filter>Render API\DirectX12\Descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="BufferUploader.cpp">
+      <Filter>Render API\DirectX12\MemoryManagement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

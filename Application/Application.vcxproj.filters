@@ -29,5 +29,8 @@
     <FxCompile Include="shaders\PS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
+    <FxCompile Include="BlurPS.hlsl">
+      <Filter>shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

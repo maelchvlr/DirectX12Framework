@@ -4,6 +4,8 @@
 
 // Windows headers:
 #include <iostream>
+#include <vector>
+#include <string>
 
 //DirectX headers:
 #include <d3d12.h>

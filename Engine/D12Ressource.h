@@ -13,6 +13,10 @@ namespace Engine
 		void Initialize(ID3D12Device* pDevice, const unsigned int numBytes, D3D12_HEAP_TYPE heapType, D3D12_RESOURCE_STATES initialState);
 
 		void InitializeAsDepthBuffer(ID3D12Device* pDevice, const unsigned int width, const unsigned int height);
+		void InitializeAsRenderTarget(ID3D12Device* pDevice, const unsigned int width, const unsigned int height, DXGI_FORMAT format);
+
+		void CreateRTV(ID3D12Device* pDevice, D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle);
+
 
 		void Release();
 		void* GetCPUMemory();

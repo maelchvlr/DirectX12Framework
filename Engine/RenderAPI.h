@@ -1,7 +1,5 @@
 #pragma once
-#include "EngineMin.h"
-#include <Windows.h>
-#include <DirectXMath.h>
+#include "pch.h"
 
 #include "RenderDataTypes.h"
 
@@ -14,6 +12,7 @@
 
 #include "D12PipelineState.h"
 #include "D12DescriptorHeap.h"
+#include "BufferUploader.h"
 
 namespace Engine
 {
@@ -39,19 +38,32 @@ namespace Engine
 		DXGISwapChain mSwapChain;
 
 		D12PipelineState mBasePipeline;
+		D12PipelineState mBlurPipeline;
 		D12Ressource mDepthBuffer;
 
 		D3D12_VIEWPORT mViewport;
 		D3D12_RECT mScissorRect;
 
 		D12DescriptorHeap mDepthDescHeap;
+		BufferUploader mBufferUploader;
 
-		D12Ressource mDynamicVertexBuffer;
-		D3D12_VERTEX_BUFFER_VIEW mDynamicVertexBufferView;
-
-		D12Ressource mCBPassData;
+		D3D12_VERTEX_BUFFER_VIEW mVertexBufferView;
+		D3D12_INDEX_BUFFER_VIEW mIndexBufferView;
 
 		DirectX::XMMATRIX mViewProjectionMatrix;
+
+		//scene resources
+
+		D12Ressource mVertexBuffer;
+		D12Ressource mIndexBuffer;
+		std::vector<D12Ressource> mMaterialsBuffer;
+		std::vector<D12Ressource> mObjTransforms;
+
+		D12Ressource mCBPassData;
+		Render::Light mLights[8];
+
+		D12Ressource mSceneRenderTarget;
+
 
 	private:
 		UINT mWidth = 0;

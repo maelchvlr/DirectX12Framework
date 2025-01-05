@@ -57,11 +57,11 @@
 		 - Constant buffer [X]
 		 - Bind it to the pipeline [X]
 
-		Rendering a 3D box - Creating the vertices and uploading []
-		Depth buffering []
+		Rendering a 3D box - Creating the vertices and uploading [X]
+		Depth buffering [X]
 
-		Uploading data to the default heap []
-		Ressource barriers []
+		Uploading data to the default heap [X]
+		Ressource barriers [X]
 
 
 		------
@@ -69,17 +69,27 @@
 		Direct X 12 coordinate system: Left handed system (X toward the right, Y up, Z towards the horizon)
 		Define the coordinate system [X]
 
-		Define the camera position with a looking direction []
+		Define the camera position with a looking direction [X]
 
-		Define a 3D object at 0 0 0 []
-		Offset the camera and set it to look at the origin []
+		Define a 3D object at 0 0 0 [X]
+		Offset the camera and set it to look at the origin [X]
 
-		Adress the math and shader computation to render the object []
+		Adress the math and shader computation to render the object [X]
 
 
 		*/
 
+		/*
 
+		Create a buffer on the default heap [X]
+
+		Change the state of the buffer into a writable state [X]
+
+		create/use a buffer on the upload heap aswell, as a command queue, commandlist and sync to upload data [X]
+
+		transition the default heap buffer to a readable state [X]
+
+		*/
 
 
 

@@ -39,13 +39,14 @@ namespace Engine
 		{
 			PRINT_N("Shader loading error: " << result);
 		}
-
 		if (errorMsg)
 		{
 			PRINT_N("Shader compilation error: " << (const char*) errorMsg->GetBufferPointer())
 		}
+		else {
+			PRINT_W_N("Shader '"<< filename <<"' compiled successfully.");
+		}
 
-		PRINT_W_N("Shader '"<< filename <<"' compiled successfully.");
 
 	}
 	void HLSLShader::Release()
