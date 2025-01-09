@@ -215,13 +215,14 @@ namespace Engine
 		mIndexBufferView.SizeInBytes = KBs(16);
 
 		mBasePipeline.Initialize(mDevice.Get());
+		mPlanarShadowPipeline.InitializeAsTransparent(mDevice.Get());
 
 		mDepthBuffer.InitializeAsDepthBuffer(mDevice.Get(), mWidth, mHeight);
 
 		mDepthDescHeap.InitializeDepthHeap(mDevice.Get());
 
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-		dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 		dsvDesc.Texture2D.MipSlice = 0;
 		dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
