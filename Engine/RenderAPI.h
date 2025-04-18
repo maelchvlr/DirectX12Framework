@@ -38,7 +38,7 @@ namespace Engine
 		DXGISwapChain mSwapChain;
 
 		D12PipelineState mBasePipeline;
-		D12PipelineState mBlurPipeline;
+		D12PipelineState mPlanarShadowPipeline;
 		D12Ressource mDepthBuffer;
 
 		D3D12_VIEWPORT mViewport;

@@ -16,6 +16,9 @@
     <Filter Include="shaders">
       <UniqueIdentifier>{5aef173c-e33f-443d-afc3-e9c0db69a81f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\pshadow">
+      <UniqueIdentifier>{ee1fd9b0-6a8d-4c63-a4cb-c21d6669e1cb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,9 +30,6 @@
       <Filter>shaders</Filter>
     </FxCompile>
     <FxCompile Include="shaders\PS.hlsl">
-      <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="BlurPS.hlsl">
       <Filter>shaders</Filter>
     </FxCompile>
   </ItemGroup>

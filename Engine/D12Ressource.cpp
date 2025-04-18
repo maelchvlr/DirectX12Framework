@@ -8,6 +8,40 @@ namespace Engine
 		Release();
 	}
 
+	D12Ressource::D12Ressource(D12Ressource&& other) noexcept
+	{
+		if (other.mMemory) { other->Unmap(0, 0); }
+
+		if (other.Get())
+		{
+			Swap(other);
+		}
+
+		if (Get() && other.mMemory)
+		{
+			Get()->Map(0, 0, &mMemory);
+			other.mMemory = nullptr;
+		}
+	}
+
+	D12Ressource& D12Ressource::operator=(D12Ressource&& other) noexcept
+	{
+		if (other.mMemory) { other->Unmap(0, 0); }
+
+		if (other.Get())
+		{
+			Swap(other);
+		}
+
+		if (Get() && other.mMemory)
+		{
+			Get()->Map(0, 0, &mMemory);
+			other.mMemory = nullptr;
+		}
+
+		return *this;
+	}
+
 	void D12Ressource::Initialize(ID3D12Device* pDevice, const unsigned int numBytes, D3D12_HEAP_TYPE heapType, D3D12_RESOURCE_STATES initialState)
 	{
 		D3D12_HEAP_PROPERTIES heapProp = {};
@@ -53,13 +87,13 @@ namespace Engine
 		resourceDesc.Height = height;
 		resourceDesc.DepthOrArraySize = 1;
 		resourceDesc.MipLevels = 0;
-		resourceDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		resourceDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		resourceDesc.SampleDesc = { 1,0 };
 		resourceDesc.Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN;
 		resourceDesc.Flags = D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL;
 
 		D3D12_CLEAR_VALUE clearValue = {};
-		clearValue.Format = DXGI_FORMAT_D32_FLOAT;
+		clearValue.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		clearValue.DepthStencil.Depth = 1.0f;
 		clearValue.DepthStencil.Stencil = 0.0f;
 

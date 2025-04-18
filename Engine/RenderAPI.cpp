@@ -215,13 +215,14 @@ namespace Engine
 		mIndexBufferView.SizeInBytes = KBs(16);
 
 		mBasePipeline.Initialize(mDevice.Get());
+		mPlanarShadowPipeline.InitializeAsTransparent(mDevice.Get());
 
 		mDepthBuffer.InitializeAsDepthBuffer(mDevice.Get(), mWidth, mHeight);
 
 		mDepthDescHeap.InitializeDepthHeap(mDevice.Get());
 
 		D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
-		dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 		dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 		dsvDesc.Texture2D.MipSlice = 0;
 		dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
@@ -243,7 +244,7 @@ namespace Engine
 		
 		DirectX::XMMATRIX viewMatrix;
 
-		viewMatrix = DirectX::XMMatrixLookAtLH({-8.0f, 3.5f, -8.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f});
+		viewMatrix = DirectX::XMMatrixLookAtLH({ 0.0f, 8.5f,-8.0f,0.0f }, { 0.0f,0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f,0.0f });
 
 		DirectX::XMMATRIX projectionMatrix;
 
@@ -256,7 +257,6 @@ namespace Engine
 
 		// material allocations
 		{
-			mMaterialsBuffer.reserve(3);
 
 
 			mMaterialsBuffer.emplace_back(D12Ressource());
@@ -294,7 +294,7 @@ namespace Engine
 
 		mLights[0].position = { 0.0f, 0.0f, 0.0f };
 		mLights[0].strength = 1.0f;
-		mLights[0].direction = { 1.0f, -1.0f, -1.0f };
+		mLights[0].direction = { 0.0f,-1.0f,0.0f };
 
 
 		// transform Allocations
@@ -307,6 +307,9 @@ namespace Engine
 			mObjTransforms[0]->SetName(L"Object Transform 1");
 
 			ObjectData tempData;
+			tempData.transform.r[3] = { 0.0f, 1.0f, 0.0f, 1.0f };
+
+
 			memcpy(mObjTransforms[0].GetCPUMemory(), &tempData, sizeof(ObjectData));
 
 			mObjTransforms.emplace_back(D12Ressource());
@@ -317,7 +320,7 @@ namespace Engine
 			mObjTransforms[1]->SetName(L"Object Transform 2");
 
 			tempData.transform.r[0] = { .3f, 0.0f, 1.0f, 0.0f };
-			tempData.transform.r[3] = { -3.0f, 0.0f, -2.0f, 0.0f };
+			tempData.transform.r[3] = { -3.0f, 1.0f, -2.0f, 1.0f };
 			memcpy(mObjTransforms[1].GetCPUMemory(), &tempData, sizeof(ObjectData));
 
 			mObjTransforms.emplace_back(D12Ressource());
@@ -329,9 +332,9 @@ namespace Engine
 
 			tempData.transform = DirectX::XMMatrixIdentity();
 			tempData.transform.r[0] = { 1000.0f, 0.0f, 0.0f, 0.0f };
-			tempData.transform.r[1] = { 0.0f, 0.3f, 0.0f, 0.0f };
+			tempData.transform.r[1] = { 0.0f, 1.0f, 0.0f, 0.0f };
 			tempData.transform.r[2] = { 0.0f, 0.0f, 1000.0f, 0.0f };
-			tempData.transform.r[3] = { 0.0f, -4.0f, 0.0f, 1.0f };
+			tempData.transform.r[3] = { 0.0f, -1.0f, 0.0f, 1.0f };
 
 			memcpy(mObjTransforms[2].GetCPUMemory(), &tempData, sizeof(ObjectData));
 		}
@@ -361,7 +364,7 @@ namespace Engine
 
 
 		mCommandList.GFXCmd()->ClearRenderTargetView(rtvHandle, clearColor, 0, 0);
-		mCommandList.GFXCmd()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, 0);
+		mCommandList.GFXCmd()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, 0);
 		mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
 
 		mCommandList.GFXCmd()->RSSetViewports(1, &mViewport);
@@ -448,6 +451,7 @@ namespace Engine
 
 
 		mBasePipeline.Release();
+		mPlanarShadowPipeline.Release();
 		mDepthDescHeap.Release();
 		mDepthBuffer.Release();
 

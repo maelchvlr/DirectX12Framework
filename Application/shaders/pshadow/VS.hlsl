@@ -7,7 +7,7 @@ struct VS_INPUT
 struct VS_OUTPUT
 {
 	float4 position : SV_POSITION;
-	float3 normal : NORMAL;
+
 };
 
 struct LightData
@@ -50,7 +50,6 @@ VS_OUTPUT main(VS_INPUT input)
     output.position = mul(gPassData.viewProj, float4(worldPos, 1.0f));
 	
 	
-    output.normal = mul((float3x3) gObjectData.transform, input.normal);
 
 	return output;
 	
