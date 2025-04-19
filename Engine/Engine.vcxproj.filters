@@ -114,6 +114,9 @@
     <ClInclude Include="BufferUploader.h">
       <Filter>Render API\DirectX12\MemoryManagement</Filter>
     </ClInclude>
+    <ClInclude Include="TimeStep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="BufferUploader.cpp">
       <Filter>Render API\DirectX12\MemoryManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeStep.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
