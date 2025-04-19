@@ -17,7 +17,7 @@
       <UniqueIdentifier>{5aef173c-e33f-443d-afc3-e9c0db69a81f}</UniqueIdentifier>
     </Filter>
     <Filter Include="shaders\pshadow">
-      <UniqueIdentifier>{f02f9bf0-ea9d-4aa0-95c9-d3cc8137c175}</UniqueIdentifier>
+      <UniqueIdentifier>{ee1fd9b0-6a8d-4c63-a4cb-c21d6669e1cb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,12 +31,6 @@
     </FxCompile>
     <FxCompile Include="shaders\PS.hlsl">
       <Filter>shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\pshadow\ShadowVS.hlsl">
-      <Filter>shaders\pshadow</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\pshadow\ShadowPS.hlsl">
-      <Filter>shaders\pshadow</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

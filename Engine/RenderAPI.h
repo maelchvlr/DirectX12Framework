@@ -25,7 +25,7 @@ namespace Engine
 
 		void Initialize(HWND hwnd, const UINT width, const UINT height);
 
-		void UpdateDraw();
+		void UpdateDraw(const float ts);
 
 		void Release();
 
@@ -59,10 +59,17 @@ namespace Engine
 		std::vector<D12Ressource> mMaterialsBuffer;
 		std::vector<D12Ressource> mObjTransforms;
 
+		std::vector<Render::ObjectData> mObjTransformsCPU;
+
+		std::vector<D12Ressource> mShadowTransforms;
+
 		D12Ressource mCBPassData;
 		Render::Light mLights[8];
 
 		D12Ressource mSceneRenderTarget;
+
+	private:
+		float mLightCycle = 0.5f;
 
 
 	private:

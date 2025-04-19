@@ -2,6 +2,7 @@
 #include "RenderAPI.h"
 
 #include <vector>
+#include <string>
 
 #include "DXGIFactory.h"
 #include "DXGIAdapter.h"
@@ -244,7 +245,7 @@ namespace Engine
 		
 		DirectX::XMMATRIX viewMatrix;
 
-		viewMatrix = DirectX::XMMatrixLookAtLH({-8.0f, 3.5f, -8.0f, 0.0f}, {0.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f});
+		viewMatrix = DirectX::XMMatrixLookAtLH({ 0.0f, 8.5f,-12.0f,0.0f }, { 0.0f,0.0f,0.0f,0.0f }, { 0.0f,1.0f,0.0f,0.0f });
 
 		DirectX::XMMATRIX projectionMatrix;
 
@@ -257,7 +258,6 @@ namespace Engine
 
 		// material allocations
 		{
-			mMaterialsBuffer.reserve(3);
 
 
 			mMaterialsBuffer.emplace_back(D12Ressource());
@@ -290,12 +290,22 @@ namespace Engine
 
 			mBufferUploader.Upload((D12Ressource*)mMaterialsBuffer[2].GetAddressOf(), &material, sizeof(MaterialCelShader),
 				(D12CommandList*)mCommandList.GetAddressOf(), (D12CommandQueue*)mCommandQueue.GetAddressOf(), D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
+
+			mMaterialsBuffer.emplace_back(D12Ressource());
+
+			mMaterialsBuffer[3].Initialize(mDevice.Get(), Utils::CalculateCOnstantBufferAlignment(sizeof(MaterialCelShader)), D3D12_HEAP_TYPE_DEFAULT, D3D12_RESOURCE_STATE_COMMON);
+			mMaterialsBuffer[3]->SetName(L"Material CB 4 (shadows)");
+
+			material.diffuseAlbedo = { 0.0f, 0.0f ,0.0f, 0.5f };
+
+			mBufferUploader.Upload((D12Ressource*)mMaterialsBuffer[3].GetAddressOf(), &material, sizeof(MaterialCelShader),
+				(D12CommandList*)mCommandList.GetAddressOf(), (D12CommandQueue*)mCommandQueue.GetAddressOf(), D3D12_RESOURCE_STATE_VERTEX_AND_CONSTANT_BUFFER);
 		}
 
 
 		mLights[0].position = { 0.0f, 0.0f, 0.0f };
 		mLights[0].strength = 1.0f;
-		mLights[0].direction = { 1.0f, -1.0f, -1.0f };
+		mLights[0].direction = { 0.0f,-1.0f,0.0f };
 
 
 		// transform Allocations
@@ -308,6 +318,10 @@ namespace Engine
 			mObjTransforms[0]->SetName(L"Object Transform 1");
 
 			ObjectData tempData;
+			tempData.transform.r[3] = { 0.0f, 1.0f, 0.0f, 1.0f };
+			mObjTransformsCPU.push_back(tempData);
+
+
 			memcpy(mObjTransforms[0].GetCPUMemory(), &tempData, sizeof(ObjectData));
 
 			mObjTransforms.emplace_back(D12Ressource());
@@ -317,8 +331,11 @@ namespace Engine
 				D3D12_RESOURCE_STATE_GENERIC_READ);
 			mObjTransforms[1]->SetName(L"Object Transform 2");
 
-			tempData.transform.r[0] = { .3f, 0.0f, 1.0f, 0.0f };
-			tempData.transform.r[3] = { -3.0f, 0.0f, -2.0f, 0.0f };
+			tempData.transform = DirectX::XMMatrixIdentity();
+			tempData.transform.r[0] = { .3f,0.0f,1.0f,0.0f };
+			tempData.transform.r[3] = { -6.0f,3.5f,-3.0f,1.0f };
+
+			mObjTransformsCPU.push_back(tempData);
 			memcpy(mObjTransforms[1].GetCPUMemory(), &tempData, sizeof(ObjectData));
 
 			mObjTransforms.emplace_back(D12Ressource());
@@ -330,98 +347,200 @@ namespace Engine
 
 			tempData.transform = DirectX::XMMatrixIdentity();
 			tempData.transform.r[0] = { 1000.0f, 0.0f, 0.0f, 0.0f };
-			tempData.transform.r[1] = { 0.0f, 0.3f, 0.0f, 0.0f };
+			tempData.transform.r[1] = { 0.0f, 1.0f, 0.0f, 0.0f };
 			tempData.transform.r[2] = { 0.0f, 0.0f, 1000.0f, 0.0f };
-			tempData.transform.r[3] = { 0.0f, -4.0f, 0.0f, 1.0f };
+			tempData.transform.r[3] = { 0.0f, -1.0f, 0.0f, 1.0f };
+
+			mObjTransformsCPU.push_back(tempData);
 
 			memcpy(mObjTransforms[2].GetCPUMemory(), &tempData, sizeof(ObjectData));
 		}
 
+		// shadow transforms
+		{
+			mShadowTransforms.resize(mObjTransforms.size());
+
+
+			for (int i = 0; i < mObjTransforms.size(); i++) {
+				mShadowTransforms[i].Initialize(mDevice.Get(), Utils::CalculateCOnstantBufferAlignment(sizeof(ObjectData)), D3D12_HEAP_TYPE_UPLOAD, D3D12_RESOURCE_STATE_GENERIC_READ);
+				std::wstring name = L"Shadow transform buffer ";
+				name.append(std::to_wstring(i));
+
+				mShadowTransforms[i]->SetName(name.c_str());
+
+				ObjectData tempData;
+
+				memcpy(mShadowTransforms[i].GetCPUMemory(), &tempData, sizeof(ObjectData));
+			}
+		}
+
 	}
 
-	void RenderAPI::UpdateDraw()
+	void RenderAPI::UpdateDraw(const float ts)
 	{
-		memcpy(mCBPassData.GetCPUMemory(), &mViewProjectionMatrix, sizeof(PassData::viewProjectionMatrix));
-		memcpy((BYTE*)mCBPassData.GetCPUMemory() + sizeof(PassData::viewProjectionMatrix), &mLights[0], sizeof(Light));
+		Light currentFrameLights = mLights[0];
 
-
-
-		D3D12_RESOURCE_BARRIER barrier = {};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = mSwapChain.GetCurrentRenderTarget();
-		barrier.Transition.Subresource = 0;
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
-
-		mCommandList.GFXCmd()->ResourceBarrier(1, &barrier);
-
-		const float clearColor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-		D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = mSwapChain.GetCurrentRTVHandle();
-		D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = mDepthDescHeap.Get()->GetCPUDescriptorHandleForHeapStart();
-
-
-		mCommandList.GFXCmd()->ClearRenderTargetView(rtvHandle, clearColor, 0, 0);
-		mCommandList.GFXCmd()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH, 1.0f, 0, 0, 0);
-		mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
-
-		mCommandList.GFXCmd()->RSSetViewports(1, &mViewport);
-		mCommandList.GFXCmd()->RSSetScissorRects(1, &mScissorRect);
-
-
-		mCommandList.GFXCmd()->SetGraphicsRootSignature(mBasePipeline.GetRootSignature());
-		mCommandList.GFXCmd()->SetPipelineState(mBasePipeline.Get());
-		mCommandList.GFXCmd()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		mCommandList.GFXCmd()->IASetVertexBuffers(0, 1, &mVertexBufferView);
-		mCommandList.GFXCmd()->IASetIndexBuffer(&mIndexBufferView);
-
-		// draw call
+		//Simulation
 		{
-			//cube1
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(0, mCBPassData.Get()->GetGPUVirtualAddress());
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mObjTransforms[0].Get()->GetGPUVirtualAddress());
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[0].Get()->GetGPUVirtualAddress());
 
-			mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			float increment = 0.05f * ts;
 
-			//cube2
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(0, mCBPassData.Get()->GetGPUVirtualAddress());
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mObjTransforms[1].Get()->GetGPUVirtualAddress());
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[1].Get()->GetGPUVirtualAddress());
+			if (mLightCycle >= 1.0f) {
+				mLightCycle = 0.0f;
+			}
 
-			mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			mLightCycle += increment;
 
-			//floor
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(0, mCBPassData.Get()->GetGPUVirtualAddress());
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mObjTransforms[2].Get()->GetGPUVirtualAddress());
-			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[2].Get()->GetGPUVirtualAddress());
 
-			mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			float clampedCycle = (mLightCycle * 2.0f) - 1.0f; // this will set it between -1 and 1 (with 0.0 = midday)
+			float maxrotation = 3.14;// / 2.0f;
+			float actualrotation = maxrotation * clampedCycle;
+
+			DirectX::XMMATRIX rotationMatrix = DirectX::XMMatrixRotationNormal({ 0.0f,0.0f,1.0f,0.0f }, actualrotation);
+
+			DirectX::XMVECTOR frameLightDirection = DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&mLights[0].direction), rotationMatrix);
+
+			DirectX::XMStoreFloat3(&currentFrameLights.direction, frameLightDirection);
+
 		}
 
 
-		barrier = {};
-		barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
-		barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-		barrier.Transition.pResource = mSwapChain.GetCurrentRenderTarget();
-		barrier.Transition.Subresource = 0;
-		barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
-		barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
 
-		mCommandList.GFXCmd()->ResourceBarrier(1, &barrier);
 
-		mCommandList.GFXCmd()->Close();
-		mCommandQueue.M_ExecuteCommandList(mCommandList.Get());
 
-		mSwapChain.Present();
 
-		while (mCommandQueue.GetFence()->GetCompletedValue() < mCommandQueue.M_GetCurrentFenceValue())
+		//Update buffers
 		{
-			_mm_pause();
+			memcpy(mCBPassData.GetCPUMemory(), &mViewProjectionMatrix, sizeof(PassData::viewProjectionMatrix));
+			memcpy((BYTE*)mCBPassData.GetCPUMemory() + sizeof(PassData::viewProjectionMatrix), &currentFrameLights, sizeof(Light));
+
+			DirectX::XMVECTOR planeToCastShadow = { 0.0f,1.0f,0.0f,0.0f };
+			DirectX::XMVECTOR dirToLightSource = DirectX::XMVectorNegate(DirectX::XMLoadFloat3(&currentFrameLights.direction));
+
+			DirectX::XMMATRIX shadowMatrix = DirectX::XMMatrixShadow(planeToCastShadow, dirToLightSource);
+			DirectX::XMMATRIX translation = DirectX::XMMatrixTranslation(0.0f, 0.001f, 0.0f);
+
+
+			for (int i = 0; i < mShadowTransforms.size(); i++) {
+				ObjectData tempData;
+				tempData.transform = mObjTransformsCPU[i].transform * shadowMatrix * translation;
+				memcpy(mShadowTransforms[i].GetCPUMemory(), &tempData, sizeof(ObjectData));
+
+			}
+
 		}
 
-		mCommandList.ResetCommandList();
+
+
+
+		//Draw frame
+		{
+			D3D12_RESOURCE_BARRIER barrier = {};
+			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+			barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+			barrier.Transition.pResource = mSwapChain.GetCurrentRenderTarget();
+			barrier.Transition.Subresource = 0;
+			barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_PRESENT;
+			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_RENDER_TARGET;
+
+			mCommandList.GFXCmd()->ResourceBarrier(1, &barrier);
+
+			const float clearColor[] = { 0.0f,0.0f,0.0f,1.0f };
+			D3D12_CPU_DESCRIPTOR_HANDLE rtvHandle = mSwapChain.GetCurrentRTVHandle();
+			D3D12_CPU_DESCRIPTOR_HANDLE dsvHandle = mDepthDescHeap->GetCPUDescriptorHandleForHeapStart();
+
+			mCommandList.GFXCmd()->ClearRenderTargetView(rtvHandle, clearColor, 0, 0);
+			mCommandList.GFXCmd()->ClearDepthStencilView(dsvHandle, D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0, 0, 0);
+			mCommandList.GFXCmd()->OMSetRenderTargets(1, &rtvHandle, false, &dsvHandle);
+
+			mCommandList.GFXCmd()->RSSetViewports(1, &mViewport);
+			mCommandList.GFXCmd()->RSSetScissorRects(1, &mScissorRect);
+
+			mCommandList.GFXCmd()->SetGraphicsRootSignature(mBasePipeline.GetRootSignature());
+			mCommandList.GFXCmd()->SetPipelineState(mBasePipeline.Get());
+			mCommandList.GFXCmd()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+			mCommandList.GFXCmd()->IASetVertexBuffers(0, 1, &mVertexBufferView);
+			mCommandList.GFXCmd()->IASetIndexBuffer(&mIndexBufferView);
+			mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(0, mCBPassData.Get()->GetGPUVirtualAddress());
+
+			//Draw call
+			{
+
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mObjTransforms[0].Get()->GetGPUVirtualAddress());
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[0].Get()->GetGPUVirtualAddress());
+
+				mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			}
+
+
+			{
+
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mObjTransforms[1].Get()->GetGPUVirtualAddress());
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[1].Get()->GetGPUVirtualAddress());
+
+				mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			}
+
+			//draw a floor
+			{
+
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mObjTransforms[2].Get()->GetGPUVirtualAddress());
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[2].Get()->GetGPUVirtualAddress());
+
+				mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			}
+
+			mCommandList.GFXCmd()->SetPipelineState(mPlanarShadowPipeline.Get());
+			mCommandList.GFXCmd()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+			//Draw call
+			{
+
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mShadowTransforms[0].Get()->GetGPUVirtualAddress());
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[3].Get()->GetGPUVirtualAddress());
+
+				mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			}
+
+
+			{
+
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(1, mShadowTransforms[1].Get()->GetGPUVirtualAddress());
+				mCommandList.GFXCmd()->SetGraphicsRootConstantBufferView(2, mMaterialsBuffer[3].Get()->GetGPUVirtualAddress());
+
+				mCommandList.GFXCmd()->DrawIndexedInstanced(G_INDICES, 1, 0, 0, 0);
+			}
+
+
+
+
+			barrier = {};
+			barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+			barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+			barrier.Transition.pResource = mSwapChain.GetCurrentRenderTarget();
+			barrier.Transition.Subresource = 0;
+			barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
+			barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
+
+			mCommandList.GFXCmd()->ResourceBarrier(1, &barrier);
+
+
+			mCommandList.GFXCmd()->Close();
+			mCommandQueue.M_ExecuteCommandList(mCommandList.Get());
+
+			mSwapChain.Present();
+
+			while (mCommandQueue.GetFence()->GetCompletedValue() < mCommandQueue.M_GetCurrentFenceValue()) {
+
+				_mm_pause();
+			}
+
+			mCommandList.ResetCommandList();
+
+		}
+
 	}
 
 
@@ -449,6 +568,7 @@ namespace Engine
 
 
 		mBasePipeline.Release();
+		mPlanarShadowPipeline.Release();
 		mDepthDescHeap.Release();
 		mDepthBuffer.Release();
 

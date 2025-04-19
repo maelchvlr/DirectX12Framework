@@ -50,7 +50,7 @@ VS_OUTPUT main(VS_INPUT input)
     output.position = mul(gPassData.viewProj, float4(worldPos, 1.0f));
 	
 	
-    output.normal = mul(gObjectData.transform, float4(input.normal, 1.0f)).xyz;
+    output.normal = mul((float3x3) gObjectData.transform, input.normal);
 
 	return output;
 	
